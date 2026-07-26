@@ -9,24 +9,31 @@ interface FloatingWhatsAppProps {
 }
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 16, scale: 0.96 },
+  hidden: { 
+    opacity: 0, 
+    y: 24, 
+    scale: 0.95,
+    filter: 'blur(8px)',
+  },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
+    filter: 'blur(0px)',
     transition: {
-      duration: 0.35,
+      duration: 0.4,
       ease: [0.16, 1, 0.3, 1],
-      staggerChildren: 0.07,
-      delayChildren: 0.04,
+      staggerChildren: 0.06,
+      delayChildren: 0.03,
     },
   },
   exit: {
     opacity: 0,
-    y: 12,
+    y: 16,
     scale: 0.96,
+    filter: 'blur(6px)',
     transition: {
-      duration: 0.2,
+      duration: 0.22,
       ease: [0.7, 0, 0.84, 0],
     },
   },
@@ -132,11 +139,12 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({ onOpenSiteVi
         <AnimatePresence>
           {isOpen && (
             <motion.div
+              layout
               variants={cardVariants}
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="w-[calc(100vw-2rem)] max-w-sm sm:w-96 bg-[#0f1117] border border-[#c5a059]/40 rounded-xl shadow-2xl p-4 sm:p-5 text-white max-h-[80vh] overflow-y-auto"
+              className="w-[calc(100vw-2rem)] max-w-sm sm:w-96 bg-[#0f1117]/90 backdrop-blur-xl border border-[#c5a059]/40 rounded-2xl shadow-2xl p-4 sm:p-5 text-white max-h-[80vh] overflow-y-auto"
             >
               {/* Header */}
               <motion.div variants={itemVariants} className="flex items-center justify-between pb-3 border-b border-white/10 mb-3 sm:mb-4">
@@ -214,7 +222,7 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({ onOpenSiteVi
               </motion.div>
 
               {/* Quick Message Input */}
-              <motion.div variants={itemVariants} className="pt-1">
+              <motion.div layout variants={itemVariants} className="pt-1">
                 {isTyping && (
                   <div className="flex items-center gap-1.5 text-[10px] text-[#25D366] font-medium mb-1.5 px-1 animate-in fade-in duration-300">
                     <span className="font-sans">Architect is typing</span>

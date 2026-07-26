@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { getOptimizedCdnUrl, ImageSizePreset } from '../utils/cdnImage';
 
 export interface LazyImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   src: string;
   alt: string;
+  preset?: ImageSizePreset;
+  targetWidth?: number;
   blurDataUrl?: string;
   className?: string;
   containerClassName?: string;
@@ -27,6 +30,8 @@ export const DEFAULT_ARCHITECTURAL_BLUR_BASE64 =
 export const LazyImage: React.FC<LazyImageProps> = ({
   src,
   alt,
+  preset,
+  targetWidth,
   blurDataUrl = DEFAULT_ARCHITECTURAL_BLUR_BASE64,
   className = '',
   containerClassName = '',
@@ -38,6 +43,8 @@ export const LazyImage: React.FC<LazyImageProps> = ({
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const imgRef = useRef<HTMLDivElement>(null);
+
+  const optimizedSrc = getOptimizedCdnUrl(src, { preset, width: targetWidth });
 
   useEffect(() => {
     if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
@@ -93,7 +100,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
       {/* Actual Image with Lazy Intersection Loading & Smooth Blur-Up Transition */}
       {isInView && (
         <img
-          src={src}
+          src={optimizedSrc}
           alt={alt}
           referrerPolicy={referrerPolicy}
           loading="lazy"
