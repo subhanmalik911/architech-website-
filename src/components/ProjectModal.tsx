@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Bookmark, CheckCircle2, MessageCircle, Box } from 'lucide-react';
 import { Project } from '../types';
 import { SITE_CONFIG } from '../config/siteConfig';
 import { LazyImage } from './LazyImage';
+import { updateSeoMetadata, generateDefaultProjectSeo } from '../utils/seo';
 
 interface ProjectModalProps {
   project: Project | null;
@@ -23,6 +24,14 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
 
   const [activeTab, setActiveTab] = useState<'gallery' | '3d' | 'beforeafter' | 'floorplan'>('gallery');
   const [selectedImage, setSelectedImage] = useState<string>(project.heroImage);
+
+  // Dynamically update document head SEO tags when viewing a project monograph
+  useEffect(() => {
+    if (project) {
+      const seoData = generateDefaultProjectSeo(project);
+      updateSeoMetadata(seoData);
+    }
+  }, [project]);
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-y-auto">

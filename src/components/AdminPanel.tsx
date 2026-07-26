@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { X, LayoutDashboard, Users, MessageSquare, DollarSign, Settings, Sparkles, CheckCircle2, Phone, MessageCircle, BarChart3, Plus, Trash2, Edit3, ShieldCheck } from 'lucide-react';
+import { X, LayoutDashboard, Users, MessageSquare, DollarSign, Settings, Sparkles, CheckCircle2, Phone, MessageCircle, BarChart3, Plus, Trash2, Edit3, ShieldCheck, Globe } from 'lucide-react';
 import { SITE_CONFIG } from '../config/siteConfig';
+import { PROJECTS_DATA } from '../data/portfolioData';
+import { ProjectSeoManager } from './ProjectSeoManager';
 
 interface AdminPanelProps {
   isOpen: boolean;
@@ -10,7 +12,7 @@ interface AdminPanelProps {
 export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
-  const [activeTab, setActiveTab] = useState<'leads' | 'reviews' | 'pricing' | 'config'>('leads');
+  const [activeTab, setActiveTab] = useState<'leads' | 'reviews' | 'pricing' | 'seo' | 'config'>('leads');
 
   // Sample leads data for demonstration
   const [leads, setLeads] = useState([
@@ -89,6 +91,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
             { id: 'leads', label: 'Lead Inquiries & Calls', icon: Users, badge: '3 New' },
             { id: 'reviews', label: 'Client Video Reviews', icon: MessageSquare },
             { id: 'pricing', label: 'PKR Package Rates', icon: DollarSign },
+            { id: 'seo', label: 'SEO & Canonical Links', icon: Globe, badge: 'Indexer' },
             { id: 'config', label: 'Code Template Config', icon: Settings }
           ].map((tab) => {
             const Icon = tab.icon;
@@ -244,7 +247,12 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
             </div>
           )}
 
-          {/* TAB 4: Code Template Config */}
+          {/* TAB 4: Project SEO & Canonical Links Manager */}
+          {activeTab === 'seo' && (
+            <ProjectSeoManager projects={PROJECTS_DATA} />
+          )}
+
+          {/* TAB 5: Code Template Config */}
           {activeTab === 'config' && (
             <div className="space-y-6">
               <div className="p-4 bg-white/5 border border-white/10 rounded-xl space-y-3">
